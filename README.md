@@ -24,6 +24,8 @@ my-api-server/
 ├── server.js
 └── frontend/ # (optional)
 
+ ---
+
 ## 🔌 APIs and Functionality
 
 | Method   | Endpoint             | Description                    |
@@ -43,15 +45,18 @@ my-api-server/
 - **ODM**: Mongoose  
 - **Connection**: via `mongoose.connect(process.env.MONGO_URI)` in `.env` file
 
+---
+
 ### Sample `.env` File
 
-MONGO_URI=mongodb+srv://db_sahadri:toon123@cluster0.w1qkqwl.mongodb.net/myApiDB?retryWrites=true&w=majority&appName=Cluster0
  Mongoose Schema
 const Item = mongoose.model('Item', new mongoose.Schema({
   name: String,
   price: Number,
   inStock: Boolean
 }));
+
+---
 
 ### 🧪 Sample API Requests
 ➕ Create Item
@@ -64,11 +69,17 @@ Content-Type: application/json
   "inStock": true
 }
 
+---
+
 ### 📦 Get All Items
 GET /api/items
 
+---
+
 ### 🔍 Get Item by ID
 GET /api/items/<id>
+
+---
 
 ### ♻️ Update Item
 PUT /api/items/<id>
@@ -78,8 +89,12 @@ Content-Type: application/json
   "price": 899
 }
 
+---
+
 ### ❌ Delete Item
 DELETE /api/items/<id>
+
+---
 
 ### 🖥️ How to Run the Server Locally
 1. Clone the Repository
@@ -101,6 +116,8 @@ http://localhost:5000
 Test route:
 http://localhost:5000/ping  → returns 'pong'
 
+---
+
 ### 🌐 How to Run the Frontend (Optional)
 If you created a frontend inside a frontend/ folder:
 
@@ -111,6 +128,8 @@ npm start
 Frontend runs at:
 http://localhost:3000
 
+---
+
 ### 🧠 Technologies Used
 Node.js
 Express.js
@@ -119,6 +138,8 @@ Mongoose
 dotenv
 (Optional) HTML/CSS/JS or React for frontend
 
+---
+
 ### 💡 Example Use Case
 A small e-commerce store admin dashboard to manage product listings using:
 
@@ -126,9 +147,13 @@ A secure MongoDB backend
 RESTful API for CRUD operations
 A simple frontend for interactive item management
 
+---
+
 ### 🧑‍💻 Author
 Sahadri Bhattacharyya
 GitHub: SahadriX
+
+---
 
 ### 📄 License
 This project is licensed under the MIT License.
