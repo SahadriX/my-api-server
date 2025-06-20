@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Item Manager | Premium Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --dark: #1e293b;
+      --light: #f8fafc;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+    }
+    
+    .dark body {
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    
+    .card {
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      background-color: rgba(255, 255, 255, 0.75);
+      border-radius: 12px;
+      border: 1px solid rgba(209, 213, 219, 0.3);
+    }
+    
+    .dark .card {
+      background-color: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.125);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+    
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, #94a3b8, #64748b);
+    }
+    
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(100, 116, 139, 0.3);
+    }
+    
+    .table-row {
+      transition: all 0.3s ease;
+    }
+    
+    .table-row:hover {
+      transform: translateX(4px);
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
+    
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(30px);
+    }
+    
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .custom-checkbox.checked {
+      background-color: var(--primary);
+    }
+    
+    .custom-checkbox.checked::after {
+      content: "✓";
+      color: white;
+      font-size: 12px;
+    }
+    
+    .floating-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 50;
+    }
+    
+    .floating-btn:hover {
+      transform: scale(1.1) rotate(90deg);
+    }
+    
+    .form-container {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+    
+    .form-container.open {
+      max-height: 500px;
+    }
+    
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transform: translateX(200%);
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
+    
+    .toast.show {
+      transform: translateX(0);
+    }
+    
+    .toast.error {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+  <div class="toast" id="toast"></div>
+
+  <div class="container mx-auto px-4 py-8">
+    <header class="flex justify-between items-center mb-10">
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+        Item Manager Pro
+      </h1>
+      <div class="flex items-center gap-4">
+        <label class="toggle-label">
+          <span class="text-sm font-medium">Dark Mode</span>
+          <div class="switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider"></span>
+          </div>
+        </label>
+      </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-1">
+        <div class="card p-6 shadow-lg">
+          <h2 class="text-xl font-semibold mb-4">Add New Item</h2>
+          <form id="itemForm" class="space-y-4">
+            <div>
+              <label for="name" class="block text-sm font-medium mb-1">Name</label>
+              <input type="text" id="name" required 
+                     class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-slate-800 dark:text-white transition">
+            </div>
+            
+            <div>
+              <label for="price" class="block text-sm font-medium mb-1">Price</label>
+              <input type="number" id="price" required 
+                     class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-slate-800 dark:text-white transition">
+            </div>
+            
+            <div class="checkbox-container">
+              <div id="inStockCheckbox" class="custom-checkbox"></div>
+              <label for="inStock" class="text-sm font-medium cursor-pointer">In Stock</label>
+              <input type="checkbox" id="inStock" class="hidden">
+            </div>
+            
+            <button type="submit" class="btn-primary text-white font-medium py-2 px-6 rounded-lg transition">
+              Add Item
+            </button>
+          </form>
+        </div>
+        
+        <div class="card p-6 shadow-lg mt-6">
+          <h2 class="text-xl font-semibold mb-4">Quick Stats</h2>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-indigo-50 dark:bg-slate-800 p-4 rounded-lg">
+              <p class="text-sm text-indigo-600 dark:text-indigo-400">Total Items</p>
+              <p class="text-2xl font-bold" id="totalItems">0</p>
+            </div>
+            <div class="bg-green-50 dark:bg-slate-800 p-4 rounded-lg">
+              <p class="text-sm text-green-600 dark:text-green-400">In Stock</p>
+              <p class="text-2xl font-bold" id="inStockItems">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="lg:col-span-2">
+        <div class="card p-6 shadow-lg">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold">Inventory</h2>
+            <div class="relative">
+              <input type="text" id="searchInput" placeholder="Search items..." 
+                     class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-slate-800 dark:text-white transition pl-10">
+              <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-gray-200 dark:border-gray-700">
+                  <th class="py-3 text-left">Name</th>
+                  <th class="py-3 text-left">Price</th>
+                  <th class="py-3 text-left">Status</th>
+                  <th class="py-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="itemsTable" class="divide-y divide-gray-200 dark:divide-gray-700">
+                <!-- Items will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="mt-4 flex justify-between items-center">
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              Showing <span id="showingCount">0</span> of <span id="totalCount">0</span> items
+            </div>
+            <div class="flex space-x-2">
+              <button id="prevBtn" class="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 disabled:opacity-50">Previous</button>
+              <button id="nextBtn" class="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 disabled:opacity-50">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-btn" id="addItemBtn">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    </svg>
+  </div>
+
+  <script>
+    // DOM Elements
+    const form = document.getElementById('itemForm');
+    const table = document.getElementById('itemsTable');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const inStockCheckbox = document.getElementById('inStockCheckbox');
+    const inStockInput = document.getElementById('inStock');
+    const addItemBtn = document.getElementById('addItemBtn');
+    const toast = document.getElementById('toast');
+    const searchInput = document.getElementById('searchInput');
+    const totalItemsEl = document.getElementById('totalItems');
+    const inStockItemsEl = document.getElementById('inStockItems');
+    const showingCountEl = document.getElementById('showingCount');
+    const totalCountEl = document.getElementById('totalCount');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // State
+    let currentPage = 1;
+    const itemsPerPage = 5;
+    let allItems = [];
+    let filteredItems = [];
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check for saved dark mode preference
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.documentElement.classList.add('dark');
+        darkModeToggle.checked = true;
+      }
+      
+      // Load items
+      fetchItems();
+      
+      // Set up checkbox
+      inStockCheckbox.addEventListener('click', () => {
+        inStockInput.checked = !inStockInput.checked;
+        inStockCheckbox.classList.toggle('checked', inStockInput.checked);
+      });
+    });
+
+    // Dark mode toggle
+    darkModeToggle.addEventListener('change', () => {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('darkMode', darkModeToggle.checked);
+    });
+
+    // Floating action button
+    addItemBtn.addEventListener('click', () => {
+      document.getElementById('name').focus();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Show toast notification
+    function showToast(message, isError = false) {
+      toast.textContent = message;
+      toast.className = `toast ${isError ? 'error' : ''} show`;
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Fetch items from API
+    async function fetchItems() {
+      try {
+        const res = await fetch('/api/items');
+        if (!res.ok) throw new Error('Failed to fetch items');
+        
+        allItems = await res.json();
+        filteredItems = [...allItems];
+        renderItems();
+        updateStats();
+      } catch (error) {
+        showToast(error.message, true);
+        console.error('Error fetching items:', error);
+      }
+    }
+
+    // Render items in table with pagination
+    function renderItems() {
+      const startIdx = (currentPage - 1) * itemsPerPage;
+      const endIdx = startIdx + itemsPerPage;
+      const itemsToShow = filteredItems.slice(startIdx, endIdx);
+      
+      table.innerHTML = '';
+      
+      if (itemsToShow.length === 0) {
+        const row = document.createElement('tr');
+        row.className = 'text-center py-4';
+        row.innerHTML = `<td colspan="4" class="py-4 text-gray-500 dark:text-gray-400">No items found</td>`;
+        table.appendChild(row);
+      } else {
+        itemsToShow.forEach(item => {
+          const row = document.createElement('tr');
+          row.className = 'table-row fade-in';
+          row.innerHTML = `
+            <td class="py-3 font-medium">${item.name}</td>
+            <td class="py-3">$${item.price.toFixed(2)}</td>
+            <td class="py-3">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.inStock ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'}">
+                ${item.inStock ? 'In Stock' : 'Out of Stock'}
+              </span>
+            </td>
+            <td class="py-3 text-right">
+              <div class="flex justify-end space-x-2">
+                <button onclick="editItem('${item._id}')" class="btn-secondary text-white text-xs font-medium py-1 px-3 rounded transition">
+                  Edit
+                </button>
+                <button onclick="deleteItem('${item._id}')" class="btn-danger text-white text-xs font-medium py-1 px-3 rounded transition">
+                  Delete
+                </button>
+              </div>
+            </td>
+          `;
+          table.appendChild(row);
+        });
+      }
+      
+      // Update pagination controls
+      totalCountEl.textContent = filteredItems.length;
+      showingCountEl.textContent = `${Math.min(startIdx + 1, filteredItems.length)}-${Math.min(endIdx, filteredItems.length)}`;
+      
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = endIdx >= filteredItems.length;
+    }
+
+    // Update statistics
+    function updateStats() {
+      totalItemsEl.textContent = allItems.length;
+      const inStockCount = allItems.filter(item => item.inStock).length;
+      inStockItemsEl.textContent = inStockCount;
+    }
+
+    // Search functionality
+    searchInput.addEventListener('input', () => {
+      const searchTerm = searchInput.value.toLowerCase();
+      filteredItems = allItems.filter(item => 
+        item.name.toLowerCase().includes(searchTerm) || 
+        item.price.toString().includes(searchTerm)
+      );
+      currentPage = 1;
+      renderItems();
+    });
+
+    // Pagination
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderItems();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if ((currentPage * itemsPerPage) < filteredItems.length) {
+        currentPage++;
+        renderItems();
+      }
+    });
+
+    // Form submission
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      
+      const item = {
+        name: document.getElementById('name').value,
+        price: parseFloat(document.getElementById('price').value),
+        inStock: inStockInput.checked
+      };
+      
+      try {
+        const response = await fetch('/api/items', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item)
+        });
+        
+        if (!response.ok) throw new Error('Failed to add item');
+        
+        showToast('Item added successfully!');
+        form.reset();
+        inStockCheckbox.classList.remove('checked');
+        inStockInput.checked = false;
+        await fetchItems();
+      } catch (error) {
+        showToast(error.message, true);
+        console.error('Error adding item:', error);
+      }
+    };
+
+    // Delete item
+    async function deleteItem(id) {
+      if (!confirm('Are you sure you want to delete this item?')) return;
+      
+      try {
+        const response = await fetch(`/api/items/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Failed to delete item');
+        
+        showToast('Item deleted successfully!');
+        await fetchItems();
+      } catch (error) {
+        showToast(error.message, true);
+        console.error('Error deleting item:', error);
+      }
+    }
+
+    // Edit item
+    async function editItem(id) {
+      const item = allItems.find(i => i._id === id);
+      if (!item) return;
+      
+      const newName = prompt("Enter new name:", item.name);
+      if (newName === null) return;
+      
+      const newPrice = prompt("Enter new price:", item.price);
+      if (newPrice === null) return;
+      
+      const newStock = confirm("Is this item in stock?");
+      
+      try {
+        const response = await fetch(`/api/items/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            name: newName, 
+            price: parseFloat(newPrice), 
+            inStock: newStock 
+          })
+        });
+        
+        if (!response.ok) throw new Error('Failed to update item');
+        
+        showToast('Item updated successfully!');
+        await fetchItems();
+      } catch (error) {
+        showToast(error.message, true);
+        console.error('Error updating item:', error);
+      }
+    }
+
+    // Make functions available globally
+    window.deleteItem = deleteItem;
+    window.editItem = editItem;
+  </script>
+</body>
+</html>
