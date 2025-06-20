@@ -118,7 +118,7 @@ http://localhost:5000/ping  → returns 'pong'
 ---
 
 ### 🌐 How to Run the Frontend (Optional)
-If you created a frontend inside a frontend/ folder:
+Since I created a frontend inside a frontend/ folder/index.html therefore :
 
 cd frontend
 npm install
