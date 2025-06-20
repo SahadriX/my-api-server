@@ -110,8 +110,7 @@ MONGO_URI=<your MongoDB connection string>
 4. Start the Server
 npm start
 
-Server runs at:
-http://localhost:5000
+
 
 Test route:
 http://localhost:5000/ping  → returns 'pong'
@@ -125,8 +124,6 @@ cd frontend
 npm install
 npm start
 
-Frontend runs at:
-http://localhost:3000
 
 ---
 
