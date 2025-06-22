@@ -5,17 +5,19 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
 // ✅ Serve static frontend from 'public' folder
 app.use(express.static('public'));
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB connection error", err));
+// ✅ MongoDB connection (SKIP in test)
+if (process.env.NODE_ENV !== 'test' && process.env.MONGO_URI) {
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("✅ MongoDB connected"))
+    .catch((err) => console.error("❌ MongoDB connection error", err));
+}
 
 // Mongoose model
 const Item = mongoose.model('Item', new mongoose.Schema({
@@ -91,11 +93,12 @@ app.get('/debug', (req, res) => {
   res.send('🧪 Debug route working');
 });
 
-// ❌ REMOVE duplicate root handler if using frontend
-// Comment or delete these two:
+// ✅ Only start the server if not being tested
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
 
-
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+// ✅ Export app for testing
+module.exports = app;
