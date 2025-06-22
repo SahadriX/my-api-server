@@ -39,6 +39,35 @@ my-api-server/
 
 ---
 
+## 🧪 Testing Coverage
+
+✅ **Unit Tests**  
+- Model logic (e.g., `Item.js`)
+- Pure functions (sample math logic)
+
+✅ **Integration Tests**  
+- CRUD with in-memory MongoDB using `mongodb-memory-server`
+
+✅ **API Tests**  
+- All endpoints tested using `Supertest`
+- Verified status codes and response bodies
+
+✅ **Coverage Achieved**:  
+> 100% Statements, 100% Branches, 100% Functions, 100% Lines
+
+### ✅ Test Coverage Screenshot
+
+![Test Coverage](./assets/coverage-summary.png)
+
+
+---
+### 🧪 Testing Tools Used
+Jest – Test runner and coverage
+Supertest – HTTP endpoint testing
+mongodb-memory-server – In-memory MongoDB instance
+cross-env – To pass env vars for test mode
+
+
 ## 🧱 Database Integration
 
 - **Database**: MongoDB (using MongoDB Atlas cloud)  
